@@ -23,3 +23,11 @@ networks:
   default:
     name: goows-kafkas
 ```
+
+- 서버빌드
+```
+docker compose up --build -d
+```
+<img src='https://github.com/user-attachments/assets/94ed384e-f778-45bc-a175-2a0b0c70fc3a'>
+
+<img src='https://github.com/user-attachments/assets/a9b43237-e026-4188-88d7-c8b8cf0bba93'>
