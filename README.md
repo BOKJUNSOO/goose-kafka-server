@@ -8,7 +8,7 @@
   `redis`의 경우 백엔드 서버의 `redis`와 포트충돌을 막기위해 다른 포트를 사용합니다
 
 
-`kafkaserver` : 9082 포트
+`kafkaserver` : 9092 포트
 
 `redis server` : 6380 포트
 
