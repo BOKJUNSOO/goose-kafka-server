@@ -1,4 +1,4 @@
 kafka-console-consumer.sh \
-  --topic top5-keywords \
+  --topic news_search_topic \
   --from-beginning \
   --bootstrap-server kafka:9093
