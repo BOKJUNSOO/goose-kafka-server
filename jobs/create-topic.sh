@@ -5,9 +5,8 @@ BOOTSTRAP_SERVER="kafka:9093"
 
 # 토픽 목록
 TOPICS=(
-  "news_search_topic"
+  "news-search-topic"
   "top5-keywords"
-  "user-search-keywords"
 )
 
 # 각 토픽 생성

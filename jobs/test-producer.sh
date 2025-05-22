@@ -1,3 +1,3 @@
 kafka-console-producer.sh \
-  --topic news_search_topic \
+  --topic news-search-topic \
   --bootstrap-server kafka:9093
