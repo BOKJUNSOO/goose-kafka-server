@@ -1,33 +1,56 @@
 # goows-kafka-server
 
-`goows` 어플리케이션을 위한 카프카 서버 빌드용 레포
+`goows` 어플리케이션을 위한 `spring, flink` 개발환경용 `kafka` 레포
 
 ## 카프카 클러스터 컴포넌트
 
-- 총 3가지를 빌드합니다. 
-  `redis`의 경우 백엔드 서버의 `redis`와 포트충돌을 막기위해 다른 포트를 사용합니다
-
-
 `kafkaserver` : 9092 포트
-
-`redis server` : 6380 포트
 
 `zookeeper` : 2181 포트
 
-- 네트워크 관련
+## 🔥 네트워크 관련 이슈
 
-일단 외부 다른 컨테이너와 통신을 위해 빌드해놨습니다.
+개발환경에서
+
+- 로컬에서 직접 빌드하는 `spring` 서버 개발의 편의성과
+- `docker`에 올려서 빌드한 `flink` 서버 개발의 편의성을 위해 네트워크를 설정합니다.
+- 커스텀 프로토콜을 사용해 독립적으로 개발할 수 있도록 변수 설정을 해두었습니다.
+```env
+KAFKA_LISTENER_SECURITY_PROTOCOL_MAP=INTERNAL:PLAINTEXT,EXTERNAL:PLAINTEXT KAFKA_LISTENERS=INTERNAL://0.0.0.0:9093,EXTERNAL://0.0.0.0:9092 KAFKA_ADVERTISED_LISTENERS=INTERNAL://kafka:9093,EXTERNAL://localhost:9092
+```
 
 ```yaml
 networks:
   default:
-    name: goows-kafkas
+    name: goows
 ```
 
-- 서버빌드
-```
+- `spring` 을 개발을 한다면 아래의 명령어 실행합니다.
+- `flink` 를 개발한다면 [flink](https://github.com/BOKJUNSOO/goows-flink-server) 레포를 확인!
+- 스프링 서버는 `kafka url`을 `localhost:9092`로 설정
+
+```bash
+docker network create goows
 docker compose up --build -d
+# then build spring server or flink server
 ```
-<img src='https://github.com/user-attachments/assets/94ed384e-f778-45bc-a175-2a0b0c70fc3a'>
 
-<img src='https://github.com/user-attachments/assets/a9b43237-e026-4188-88d7-c8b8cf0bba93'>
+## 📩 토픽에 메세지 전송하기
+
+- `spring & kafka` or `flink & kafka` 서버 빌드가 끝나고 카프카 컨테이너 진입
+```bash
+docker exec -it kafka /bin/bash
+```
+- 컨테이너 내부에 쉘파일을 빌드해놨습니다
+```bash
+cd /opt/kafka/jobs
+./test-producer.sh
+> 필요한 메세지를 발행합니다.
+```
+- 메세지 확인
+```bash
+./test-consumer.sh
+> 토픽에 발행된 메세지를 확인합니다.
+```
+
+- 참고로 개발환경에서 kafka 컨테이너 내부는 9093 포트로 통신합니다.
